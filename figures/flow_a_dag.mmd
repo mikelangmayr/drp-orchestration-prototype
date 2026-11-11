@@ -1,0 +1,20 @@
+flowchart LR
+  DISC[Discover FITS Frames]
+  MB[Build Master Bias]
+  MD[Build Master Dark]
+  subgraph frame["per frame x N (concurrent)"]
+    LOAD[Load Flat Frame]
+    SB[Subtract Bias]
+    SD[Subtract Dark]
+    TR[Trace Slits PypeIt]
+    SAVE[Save Slit Edges]
+    QA[Trace QA Plot]
+  end
+  DISC --> LOAD
+  LOAD --> SB
+  MB --> SB
+  SB --> SD
+  MD --> SD
+  SD --> TR
+  TR --> SAVE
+  TR --> QA

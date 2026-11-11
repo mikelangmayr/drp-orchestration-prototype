@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spie-prototype"
+version = "0.1.0"
+description = "Orchestration-pattern prototype for the LRIS-2 DRP, backing a SPIE paper"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "BSD-3-Clause" }
+authors = [{ name = "Michael Langmayr", email = "langmayr@caltech.edu" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Astronomy",
+]
+
+# Pinned top-level dependencies. PypeIt is imported, never vendored.
+dependencies = [
+  "prefect==3.4.11",
+  "pypeit==1.18.1",
+  "ccdproc==2.5.1",
+  "numpy==2.3.1",
+  "scipy==1.15.3",
+  "astropy==7.1.0",
+  "matplotlib==3.10.5",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+]
+# Process/distributed task runner for CPU-bound parallelism (Phase 6, claim 3).
+# Optional so the base install stays lean; installs dask + distributed.
+parallel = [
+  "prefect-dask==0.3.7",
+  "dask==2026.6.0",
+  "distributed==2026.6.0",
+]
+# Headless browser for capturing Prefect dashboard figures (F4/F8/F10).
+# After install run: python -m playwright install chromium
+dashboard = [
+  "playwright==1.61.0",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "slow: heavy integration tests (e.g. full PypeIt trace on a real frame)",
+]
